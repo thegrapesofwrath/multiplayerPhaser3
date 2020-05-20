@@ -1,0 +1,66 @@
+<!DOCTYPE html> 
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <meta name="description" content="particles.js is a lightweight JavaScript library for creating particles.">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <link rel="stylesheet" media="screen" href="/static/css/style.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+
+<body>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/phaser@3.0.0/dist/phaser.min.js"></script>
+  <script src="/static/javascript/game.js"></script>
+  <script type="text/javascript" charset="utf-8">
+    // var socket = io();
+    // var currentPlayerId = null
+    // socket.on('connect', function() {
+    //     console.log(socket.id)
+    //     currentPlayerId = socket.id
+    //     socket.emit('addPlayer', {socketId: socket.id});
+    // });
+    // socket.on('disconnect', function() {
+    //   console.log('d')
+    //     // console.log(socket.id)
+    //     console.log(currentPlayerId)
+    //     socket.send('removePlayer', {socketId: currentPlayerId});
+    // });
+    const socket = io();
+    var currentPlayerId = null
+    socket.on('connect', function() {
+        console.log(socket.id)
+        currentPlayerId = socket.id
+        socket.emit('addPlayer', {socketId: socket.id});
+    });
+    socket.on('disconnect', function() {
+      console.log('d')
+        // console.log(socket.id)
+        console.log(currentPlayerId)
+        // socket.emit('removePlayer', {socketId: currentPlayerId});
+        // socket.emit('addPlayer', {socketId: socket.id}); I don't think you can emit from client on disconnect because the client socket is closed already
+        $.ajax({
+          url: '/DeletePlayer',
+          data: currentPlayerId
+        });
+    });
+  </script>
+
+  <div id="navbar">
+    <a href="/">Home</a>
+  </div>
+
+  <main id="main">
+    <div id="game"></div>
+  </main>
+
+  <footer class="footer" style='padding: 25px;'>
+    <div class="container">
+    </div>
+  </footer>
+</body>
+</html>
